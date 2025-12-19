@@ -3,7 +3,7 @@ window.function = function (htmlVal) {
 
     // --- DA MODIFICARE DOPO IL DEPLOY SU VERCEL ---
     // Inseriremo qui l'URL che Vercel ci darà.
-    const baseUrl = "https://INSERISCI-QUI-IL-TUO-SITO.vercel.app/api/print"; 
+    const baseUrl = "https://glide-html-print.vercel.app/api/print"; 
     // ----------------------------------------------
 
     // Codifica l'HTML per farlo viaggiare sicuro nell'URL
