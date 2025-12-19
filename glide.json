@@ -1,0 +1,18 @@
+[
+  {
+    "kind": "column",
+    "name": "HTML Auto-Print",
+    "description": "Takes HTML code and returns a link that opens the browser print dialog.",
+    "author": "Mise",
+    "params": [
+      {
+        "name": "htmlVal",
+        "displayName": "HTML Code",
+        "type": "string"
+      }
+    ],
+    "result": {
+      "type": "string"
+    }
+  }
+]
