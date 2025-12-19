@@ -1,14 +1,17 @@
-window.function = function (htmlVal) {
+// Rendiamo la funzione asincrona per sicurezza
+window.function = async function (htmlVal) {
+    // Controllo di sicurezza: se il valore è nullo, restituiamo una stringa vuota invece di bloccarci
+    if (htmlVal === undefined) return undefined;
     if (htmlVal.value === undefined) return undefined;
 
-    // --- DA MODIFICARE DOPO IL DEPLOY SU VERCEL ---
-    // Inseriremo qui l'URL che Vercel ci darà.
-    const baseUrl = "https://glide-html-print.vercel.app/api/print"; 
-    // ----------------------------------------------
+    // INSERISCI QUI IL TUO DOMINIO VERCEL
+    const apiEndpoint = "https://glide-html-print.vercel.app/api/print"; 
 
-    // Codifica l'HTML per farlo viaggiare sicuro nell'URL
-    const encoded = encodeURIComponent(htmlVal.value);
-
-    // Restituisce il link completo
-    return `${baseUrl}?data=${encoded}`;
+    try {
+        const encodedHtml = encodeURIComponent(htmlVal.value);
+        return `${apiEndpoint}?data=${encodedHtml}`;
+    } catch (error) {
+        // Se c'è un errore nella codifica, lo restituiamo come testo
+        return "Errore nella generazione del link: " + error.message;
+    }
 }
