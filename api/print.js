@@ -26,24 +26,27 @@ export default function handler(req, res) {
           <link rel="stylesheet" href="https://unpkg.com/gutenberg-css@0.7/dist/themes/oldstyle.min.css" media="all">
 
           <style>
-              /* 1. RESET E FONT */
+              /* 1. RESET E FONT ARIAL */
               * {
                   font-family: Arial, Helvetica, sans-serif !important;
-                  background: white !important;
+                  background-color: white !important;
                   color: black !important;
-                  /* Box-sizing è fondamentale per non far sbordare i padding */
                   box-sizing: border-box !important;
               }
 
               html, body {
                   width: 100% !important;
-                  margin: 0;
-                  padding: 0;
-                  /* Evita scroll orizzontali fantasma */
-                  overflow-x: hidden !important; 
+                  margin: 0 !important;
+                  padding: 0 !important;
               }
 
-              /* 2. TITOLI RIDOTTI */
+              /* 2. MARGINI PAGINA AUMENTATI (Sopra e Sotto) */
+              body {
+                  /* 1.5cm sopra/sotto, 1.5cm ai lati */
+                  padding: 1.5cm 1.5cm 2.5cm 1.5cm !important; 
+              }
+
+              /* 3. TITOLI ALLINEATI A SINISTRA E COMPATTI */
               h1, h2, h3, h4, h5, h6 {
                   text-align: left !important;
                   font-weight: bold !important;
@@ -53,58 +56,47 @@ export default function handler(req, res) {
               h1 { font-size: 1.3rem !important; }
               h3 { font-size: 1rem !important; }
 
-              /* 3. TABELLA: FIX PER L'OVERFLOW */
+              /* 4. TABELLA: DEFAULT GUTENBERG CON LIMITE LARGHEZZA */
               table {
                   width: 100% !important;
-                  /* Cruciale: impedisce alla tabella di ignorare il 100% */
-                  max-width: 100% !important; 
-                  margin: 1rem 0 !important;
-                  /* Usiamo auto per flessibilità, ma con vincoli sulle celle */
-                  table-layout: auto !important; 
+                  max-width: 100% !important;
                   border-collapse: collapse !important;
+                  margin: 1rem 0 !important;
+                  table-layout: auto !important;
               }
 
-              th, td {
-                  vertical-align: top !important;
+              td, th {
                   border: 1px solid black !important;
                   padding: 6px 8px !important;
                   font-size: 9pt !important;
-                  
-                  /* Permette il wrapping se lo spazio finisce */
-                  white-space: normal !important; 
-                  /* Spezza le parole solo se sono più lunghe della cella stessa */
-                  overflow-wrap: break-word !important;
+                  vertical-align: top !important;
+                  /* Sicurezza per contenuti lunghi */
                   word-wrap: break-word !important;
-                  word-break: normal !important;
+                  overflow-wrap: break-word !important;
               }
 
               th {
                   background-color: #f2f2f2 !important;
-                  /* Rimosso nowrap per evitare che colonne troppe larghe spingano la tabella fuori */
                   font-weight: bold !important;
               }
 
-              /* 4. LAYOUT FISSO E MARGINI */
-              body {
-                  /* Padding ridotto come richiesto (0.5cm sopra/sotto) */
-                  padding: 0.5cm 1.5cm 1.5cm 1.5cm !important; 
-              }
-
+              /* 5. INTESTAZIONE */
               .header-container {
                   border-bottom: 1.5px solid #000;
                   margin-bottom: 1rem;
-                  padding-bottom: 0.5rem;
+                  padding-bottom: 0.3rem;
               }
 
-              /* Footer fisso */
+              /* 6. FOOTER FISSO "SOPRA" IL MARGINE */
               .print-footer {
                   position: fixed;
-                  bottom: 0;
-                  left: 0;
-                  width: 100%;
+                  /* Alzato dal bordo: 1cm dal fondo del foglio */
+                  bottom: 0.8cm; 
+                  left: 1.5cm;
+                  right: 1.5cm;
                   background: white;
-                  border-top: 1px solid #ccc;
-                  padding: 10px 1.5cm;
+                  border-top: 1px solid #ddd;
+                  padding-top: 5px;
                   font-size: 8pt;
                   text-align: left;
                   z-index: 9999;
@@ -112,23 +104,13 @@ export default function handler(req, res) {
 
               @media print {
                   @page {
-                      margin: 0;
+                      margin: 0; /* Gestito dal padding del body */
                       size: A4 portrait;
                   }
-
                   body {
-                      /* Margini ridotti in stampa */
-                      padding: 0.5cm 1.5cm 1.5cm 1.5cm !important;
-                      margin: 0 !important;
+                      /* Margine di sicurezza per non sovrapporsi al footer fisso */
+                      padding: 1.5cm 1.5cm 2.5cm 1.5cm !important;
                   }
-
-                  .print-footer {
-                      position: fixed;
-                      bottom: 0;
-                      /* Assicura che sia visibile in stampa */
-                      padding: 0.3cm 1.5cm !important;
-                  }
-
                   tr { page-break-inside: avoid !important; }
               }
           </style>
