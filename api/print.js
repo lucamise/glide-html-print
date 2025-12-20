@@ -40,14 +40,21 @@ export default function handler(req, res) {
                   padding: 0 !important;
               }
 
-              /* 2. TITOLI E INTESTAZIONE */
-              h1 { 
+              /* 2. GERARCHIA TITOLI CORRETTA (h1 > h2 > h3) */
+              h1, h2, h3, h4, h5, h6 {
                   text-align: left !important;
                   font-weight: bold !important;
-                  font-size: 1.3rem !important;
-                  margin: 0 0 0.2rem 0 !important;
+                  margin: 0.5rem 0 0.2rem 0 !important;
+                  line-height: 1.2 !important;
               }
 
+              h1 { font-size: 1.3rem !important; }   /* Titolo principale */
+              h2 { font-size: 1.15rem !important; }  /* Sotto-titolo */
+              h3 { font-size: 1.0rem !important; }   /* Titolo sezione */
+              h4 { font-size: 0.95rem !important; }
+              h5, h6 { font-size: 0.9rem !important; }
+
+              /* 3. INTESTAZIONE BI-LATERALE */
               .header-container {
                   border-bottom: 1.5px solid #000;
                   margin-bottom: 1rem;
@@ -55,26 +62,28 @@ export default function handler(req, res) {
                   width: 100%;
               }
 
-              /* Riga sotto il titolo: Flexbox per allineare sinistra/destra */
               .header-meta-row {
                   display: flex;
                   justify-content: space-between;
                   align-items: baseline;
                   width: 100%;
+                  margin-top: 2px;
               }
 
               .comp-name {
                   font-size: 10pt;
                   text-align: left;
+                  flex: 1;
               }
 
               .print-meta {
                   font-size: 8pt;
                   color: #444;
                   text-align: right;
+                  flex: 1;
               }
 
-              /* 3. TABELLA: DEFAULT GUTENBERG + MAX WIDTH 100% */
+              /* 4. TABELLA: DEFAULT GUTENBERG + MAX WIDTH 100% */
               table {
                   width: 100% !important;
                   max-width: 100% !important;
@@ -97,7 +106,7 @@ export default function handler(req, res) {
                   font-weight: bold !important;
               }
 
-              /* 4. MARGINI DI STAMPA */
+              /* 5. MARGINI DI STAMPA */
               @media print {
                   @page {
                       margin: 1.5cm;
