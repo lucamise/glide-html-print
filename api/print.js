@@ -34,6 +34,16 @@ export default function handler(req, res) {
           <style>
               body { padding: 20px; padding-bottom: 50px; }
               
+              /* --- NUOVO BLOCCO: FIX PER TABELLE E CODICI LUNGHI --- */
+              table th, table td {
+                  white-space: normal !important;        /* Permette di andare a capo */
+                  text-overflow: clip !important;        /* Toglie i puntini ... */
+                  overflow: visible !important;          /* Mostra tutto il contenuto */
+                  overflow-wrap: break-word !important;  /* Spezza le parole lunghe (codici) */
+                  word-wrap: break-word !important;      /* Compatibilità */
+                  max-width: 100%;                       /* Evita che la tabella esca dal foglio */
+              }
+              
               /* STILE HEADER AGGIORNATO */
               .header-container { 
                   border-bottom: 1px solid #000; 
