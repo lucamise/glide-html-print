@@ -22,7 +22,7 @@ export default function handler(req, res) {
           <meta charset="UTF-8">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
           <style>
-              /* 1. RESET TOTALE */
+              /* 1. RESET TOTALE E COLORE */
               *, html, body, div, section, main, article, table, tr, td {
                   background: white !important;
                   color: black !important;
@@ -32,60 +32,39 @@ export default function handler(req, res) {
                   overflow: visible !important;
               }
 
-              html, body {
-                  width: 100% !important;
-                  margin: 0 !important;
-                  padding: 0 !important;
+              @media print {
+                  @page { margin: 0; size: auto; }
+                  body { margin: 0 !important; padding: 10mm !important; }
+                  .no-print { display: none !important; }
               }
 
-              body {
-                  padding: 10mm !important;
-                  display: block !important;
-              }
+              html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+              body { padding: 10mm; display: block !important; }
 
               /* 2. TABELLA ADATTIVA */
               table {
                   display: table !important;
                   width: 100% !important;
                   border-collapse: collapse !important;
-                  /* 'auto' permette alle colonne di ridimensionarsi in base al contenuto */
                   table-layout: auto !important; 
                   margin: 20px 0 !important;
-                  border: none !important; /* Rimosso bordo esterno del tag table */
+                  border: none !important;
                   page-break-inside: auto !important;
               }
 
-              tr {
-                  page-break-inside: avoid !important;
-                  page-break-after: auto !important;
-              }
-
-              /* 3. BORDI E WRAP SULLE CELLE */
               th, td {
-                  border: 1px solid black !important; /* Griglia interna mantenuta */
-                  padding: 8px !important;
+                  border: 1px solid black !important;
+                  padding: 4px !important; /* Ridotto leggermente per guadagnare spazio */
                   vertical-align: top !important;
-                  font-size: 10pt !important;
                   text-align: left !important;
-
-                  /* ANDATA A CAPO CORRETTA */
                   white-space: normal !important;
                   word-break: normal !important; 
                   overflow-wrap: break-word !important; 
+                  /* Font iniziale */
+                  font-size: 10pt; 
               }
 
-              th { 
-                  background-color: #f2f2f2 !important; 
-                  font-weight: bold !important; 
-              }
-
-              /* 4. REGOLE STAMPA */
-              @media print {
-                  @page { margin: 1cm; size: auto; }
-                  body { padding: 0 !important; }
-                  .no-print { display: none !important; }
-                  ::-webkit-scrollbar { display: none !important; }
-              }
+              th { background-color: #f2f2f2 !important; font-weight: bold !important; }
 
               .header-container {
                   border-bottom: 2px solid black !important;
@@ -110,6 +89,24 @@ export default function handler(req, res) {
 
           <script>
               window.onload = function() {
+                  const tables = document.querySelectorAll('table');
+                  const container = document.getElementById('content-area');
+                  const maxWidth = container.offsetWidth;
+
+                  tables.forEach(table => {
+                      let fontSize = 10; // Partiamo da 10pt
+                      const minFontSize = 6; // Non scendere sotto i 6pt per leggibilità
+
+                      // Se la tabella è più larga del contenitore, riduci il font progressivamente
+                      while (table.offsetWidth > maxWidth && fontSize > minFontSize) {
+                          fontSize -= 0.5;
+                          table.querySelectorAll('td, th').forEach(cell => {
+                              cell.style.fontSize = fontSize + 'pt';
+                          });
+                      }
+                  });
+
+                  // Una volta sistemate le dimensioni, lancia la stampa
                   setTimeout(() => { window.print(); }, 500);
               };
           </script>
