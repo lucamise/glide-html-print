@@ -22,16 +22,15 @@ export default function handler(req, res) {
           <meta charset="UTF-8">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
           <style>
-              /* 1. RESET COLORI E VISIBILITÀ */
+              /* 1. RESET TOTALE */
               * {
                   background: white !important;
                   color: black !important;
                   box-sizing: border-box !important;
                   max-height: none !important;
-                  overflow: visible !important;
               }
 
-              /* 2. MARGINI STANDARD */
+              /* 2. MARGINI DI STAMPA STANDARD */
               @media print {
                   @page { 
                       margin: 1.5cm; 
@@ -40,14 +39,12 @@ export default function handler(req, res) {
                   body { 
                       margin: 0 !important; 
                       padding: 0 !important; 
-                      width: 100% !important;
                   }
                   .no-print { display: none !important; }
               }
 
               html, body { 
                   width: 100% !important; 
-                  height: auto !important;
                   margin: 0; 
                   padding: 0; 
               }
@@ -57,33 +54,45 @@ export default function handler(req, res) {
                   font-family: sans-serif;
               }
 
-              /* 3. TABELLA ADATTIVA */
+              /* 3. FIX TABELLA: ALLINEAMENTO E COERENZA COLONNE */
               table {
-                  display: table !important;
+                  display: table !important; /* Forza il comportamento tabella */
                   width: 100% !important;
                   border-collapse: collapse !important;
+                  /* 'auto' garantisce che se una cella si allarga, si allarga TUTTA la colonna */
                   table-layout: auto !important; 
                   margin: 20px 0 !important;
-                  border: none !important; /* Rimosso bordo esterno della tabella */
+                  border: none !important;
                   page-break-inside: auto !important;
               }
 
               tr {
+                  display: table-row !important;
                   page-break-inside: avoid !important;
-                  page-break-after: auto !important;
+                  vertical-align: top !important;
               }
 
               th, td {
-                  border: 1px solid black !important; /* Griglia interna */
+                  /* FORZA IL COMPORTAMENTO DA CELLA (impedisce l'effetto 'storto') */
+                  display: table-cell !important; 
+                  border: 1px solid black !important;
                   padding: 8px !important;
-                  vertical-align: top !important;
+                  
+                  /* ALLINEAMENTO VERTICALE PERFETTO */
+                  vertical-align: top !important; 
                   text-align: left !important;
                   
-                  /* ANDATA A CAPO SULLE PAROLE INTERE */
+                  /* GESTIONE TESTO: PAROLE INTERE */
                   white-space: normal !important;
                   word-break: normal !important; 
                   overflow-wrap: break-word !important; 
-                  font-size: 10pt !important; /* FONT FISSO */
+                  font-size: 10pt !important;
+              }
+
+              /* Rimuove eventuali div interni alle celle che rompono l'allineamento */
+              td > div, th > div {
+                  display: inline !important;
+                  overflow: visible !important;
               }
 
               th { 
@@ -114,7 +123,6 @@ export default function handler(req, res) {
 
           <script>
               window.onload = function() {
-                  // Lancio della stampa immediato senza calcoli sul font
                   setTimeout(() => { window.print(); }, 500);
               };
           </script>
