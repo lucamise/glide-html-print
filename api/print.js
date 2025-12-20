@@ -8,7 +8,6 @@ export default function handler(req, res) {
         catch (e) { return str || ""; }
     };
 
-    // FORMATTAZIONE SOLO DEL VALORE DATA: DD/MM/YYYY HH:mm
     const formatElegantDate = (dateStr) => {
         if (!dateStr) return "";
         try {
@@ -47,7 +46,13 @@ export default function handler(req, res) {
                   box-sizing: border-box !important;
               }
 
-              /* 2. TITOLI (h1 > h3) */
+              html, body {
+                  width: 100% !important;
+                  margin: 0 !important;
+                  padding: 0 !important;
+              }
+
+              /* 2. TITOLI */
               h1, h2, h3, h4, h5, h6 {
                   text-align: left !important;
                   font-weight: bold !important;
@@ -56,11 +61,11 @@ export default function handler(req, res) {
               h1 { font-size: 1.3rem !important; }
               h3 { font-size: 1.0rem !important; }
 
-              /* 3. INTESTAZIONE SEMPLICE (Ripristinata) */
+              /* 3. INTESTAZIONE */
               .header-container {
                   border-bottom: 1.5px solid #000;
                   margin-bottom: 1rem;
-                  padding-bottom: 0.4rem;
+                  padding-bottom: 0.5rem;
                   width: 100%;
               }
 
@@ -73,8 +78,20 @@ export default function handler(req, res) {
 
               .comp-name { font-size: 10pt; }
               .print-meta { font-size: 8pt; text-align: right; }
+              
+              /* Nuova riga per il link */
+              .app-link-row {
+                  font-size: 8pt;
+                  margin-top: 2px;
+                  text-align: left;
+              }
+              
+              .app-link-row a {
+                  color: black !important;
+                  text-decoration: none !important;
+              }
 
-              /* 4. TABELLA: MAX WIDTH 100% */
+              /* 4. TABELLA */
               table {
                   width: 100% !important;
                   max-width: 100% !important;
@@ -129,6 +146,9 @@ export default function handler(req, res) {
                       <div class="print-meta">
                           Printed on: ${elegantDate} | User: ${cleanUser}
                       </div>
+                  </div>
+                  <div class="app-link-row">
+                      App: <a href="https://flipjudge.glide.page/">https://flipjudge.glide.page/</a>
                   </div>
               </div>
 
