@@ -26,7 +26,7 @@ export default function handler(req, res) {
           <link rel="stylesheet" href="https://unpkg.com/gutenberg-css@0.7/dist/themes/oldstyle.min.css" media="all">
 
           <style>
-              /* 1. CARATTERE E ALLINEAMENTO GLOBALE */
+              /* 1. RESET E FONT ARIAL */
               * {
                   font-family: Arial, Helvetica, sans-serif !important;
                   background: white !important;
@@ -36,63 +36,54 @@ export default function handler(req, res) {
                   max-height: none !important;
               }
 
+              /* 2. RIDUZIONE E ALLINEAMENTO TITOLI */
               h1, h2, h3, h4, h5, h6 {
                   text-align: left !important;
-                  margin-bottom: 0.5rem;
-                  font-weight: bold;
+                  font-weight: bold !important;
+                  margin-top: 0.5rem !important;
+                  margin-bottom: 0.5rem !important;
               }
+
+              h1 { font-size: 1.4rem !important; } /* Dimensione ridotta */
+              h2 { font-size: 1.2rem !important; }
+              h3 { font-size: 1.1rem !important; }
+              h4, h5, h6 { font-size: 1rem !important; }
 
               body {
-                  padding: 1.5cm !important;
+                  padding: 1cm !important;
                   width: 100% !important;
               }
 
-              /* 2. TABELLA: ALLINEAMENTO COLONNE E GRIGLIA */
+              /* 3. TABELLE: DEFAULT GUTENBERG */
+              /* Rimuoviamo i nostri bordi custom per lasciare quelli di Gutenberg */
               table {
-                  display: table !important;
                   width: 100% !important;
-                  border-collapse: collapse !important;
-                  table-layout: auto !important; /* Le colonne si allargano in base al contenuto */
-                  margin: 20px 0 !important;
-                  border: none !important; /* Nessun bordo esterno al tag table */
-              }
-
-              tr {
-                  page-break-inside: avoid !important;
+                  margin: 1rem 0 !important;
+                  /* Gutenberg gestisce bordi e spaziature internamente */
               }
 
               th, td {
-                  border: 1px solid #000 !important; /* Griglia interna nera decisa */
-                  padding: 8px !important;
                   vertical-align: top !important;
                   text-align: left !important;
-                  font-size: 10pt !important;
-                  
-                  /* Andata a capo pulita (parole intere) */
-                  white-space: normal !important;
-                  word-break: normal !important;
-                  overflow-wrap: break-word !important;
-              }
-
-              th {
-                  background-color: #f0f0f0 !important;
+                  padding: 0.5rem !important;
                   font-size: 10pt !important;
               }
 
-              /* 3. LAYOUT INTESTAZIONE */
+              /* 4. LAYOUT INTESTAZIONE E FOOTER */
               .header-container {
-                  border-bottom: 2px solid #000;
-                  margin-bottom: 25px;
-                  padding-bottom: 10px;
+                  border-bottom: 1.5px solid #000;
+                  margin-bottom: 1.5rem;
+                  padding-bottom: 0.5rem;
                   text-align: left;
               }
 
               .print-footer {
-                  margin-top: 40px;
-                  border-top: 1px solid #000;
-                  padding-top: 10px;
-                  font-size: 9pt;
-                  text-align: left; /* Coerenza con il resto del documento */
+                  margin-top: 2rem;
+                  border-top: 1px solid #ddd;
+                  padding-top: 0.5rem;
+                  font-size: 8pt;
+                  text-align: left;
+                  color: #444;
               }
 
               @media print {
@@ -107,8 +98,8 @@ export default function handler(req, res) {
       </head>
       <body>
           <div class="header-container">
-              <h1 style="margin:0; font-size: 22pt;">FlipJudge AI Check</h1>
-              <h3 style="margin:5px 0; font-size: 12pt; font-weight: normal;">Competition: <strong>${cleanComp}</strong></h3>
+              <h1 style="margin:0;">FlipJudge AI Check</h1>
+              <h3 style="margin:2px 0; font-weight: normal !important;">Competition: <strong>${cleanComp}</strong></h3>
           </div>
 
           <div id="content-area">
