@@ -23,86 +23,100 @@ export default function handler(req, res) {
     // Costruiamo la pagina
     res.send(`
       <!DOCTYPE html>
-      <html lang="it">
-      <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <title>FlipJudge Print</title>
-          
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
-          
-          <style>
-              body { padding: 20px; padding-bottom: 50px; }
-              
-              /* --- NUOVO BLOCCO: FIX PER TABELLE E CODICI LUNGHI --- */
-              table th, table td {
-                  white-space: normal !important;        /* Permette di andare a capo */
-                  text-overflow: clip !important;        /* Toglie i puntini ... */
-                  overflow: visible !important;          /* Mostra tutto il contenuto */
-                  overflow-wrap: break-word !important;  /* Spezza le parole lunghe (codici) */
-                  word-wrap: break-word !important;      /* Compatibilità */
-                  max-width: 100%;                       /* Evita che la tabella esca dal foglio */
-              }
-              
-              /* STILE HEADER AGGIORNATO */
-              .header-container { 
-                  border-bottom: 1px solid #000; 
-                  padding-bottom: 8px; 
-                  margin-bottom: 20px; 
-                  text-align: left; /* Allineato a SINISTRA */
-              }
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* --- STILE PER LA VISUALIZZAZIONE A SCHERMO --- */
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th { background-color: #f4f4f4; }
 
-              /* Stile per la stampa */
-              @media print {
-                  @page { margin: 1cm; }
-                  .no-print { display: none; }
-                  
-                  .print-footer-fix { 
-                      position: fixed; 
-                      bottom: 0; 
-                      left: 0; 
-                      width: 100%; 
-                      background: white; 
-                      border-top: 1px solid #ccc; 
-                      padding-top: 5px; 
-                      text-align: center; 
-                      font-size: 9px; /* Footer piccolo */
-                      color: #555; 
-                  }
-              }
-              
-              /* Footer per anteprima a video */
-              .print-footer-fix { 
-                  margin-top: 30px; 
-                  border-top: 1px solid #ccc; 
-                  padding-top: 5px; 
-                  text-align: center; 
-                  font-size: 9px; 
-                  color: #555; 
-              }
-          </style>
-      </head>
-      <body>
+        /* --- STILE SPECIFICO PER LA STAMPA --- */
+        @media print {
+            /* 1. Forza la pagina a usare tutta la larghezza e rimuove margini inutili */
+            html, body {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: visible !important; /* Rimuove qualsiasi scrollbar */
+            }
 
-          <div class="header-container">
-              <h1 style="margin: 0; font-size: 1.2rem; text-transform: uppercase;">FlipJudge AI Check</h1>
-              
-              <h3 style="margin: 2px 0 0; font-size: 0.9rem; font-weight: normal; color: #555;">Competition: ${cleanComp}</h3>
-          </div>
+            /* 2. La tabella deve occupare il 100% del foglio */
+            table {
+                width: 100% !important;
+                table-layout: auto; /* 'auto' permette alle celle di adattarsi al contenuto */
+                page-break-inside: auto;
+            }
 
-          <div>
-              ${cleanBody}
-          </div>
+            /* 3. Gestione dei testi lunghi */
+            td, th {
+                word-wrap: break-word;      /* Spezza le parole lunghe */
+                overflow-wrap: break-word; /* Standard moderno per andare a capo */
+                white-space: normal;       /* Forza il testo a non stare su una riga sola */
+                border: 1px solid #000;    /* Rende i bordi più scuri per la stampa */
+            }
 
-          <div class="print-footer-fix">
-              FlipJudge AI Check | https://flipjudge.glide.page | Printed on ${cleanDate} | ${cleanUser}
-          </div>
+            tr {
+                page-break-inside: avoid; /* Evita che una riga venga tagliata a metà tra due pagine */
+                page-break-after: auto;
+            }
 
-          <script>
-              window.onload = function() { window.print(); };
-          </script>
-      </body>
-      </html>
+            /* 4. Nascondi bottoni o elementi che non vuoi nel PDF */
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="content">
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>Colonna 1</th>
+                    <th>Descrizione Lunga</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Dato breve</td>
+                    <td>Questo è un esempio di testo molto lungo che deve andare a capo automaticamente quando stampiamo il foglio, occupando tutta la larghezza disponibile senza creare barre di scorrimento orizzontali.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button class="no-print" onclick="window.print()">Stampa PDF</button>
+
+    <script>
+        // Logica per ricevere dati da Glide (se lo stai usando come colonna)
+        window.addEventListener("message", (event) => {
+            if (event.data && event.data.params) {
+                const p = event.data.params;
+                // Qui inserisci la logica per popolare la tabella con p.input1, ecc.
+                // Esempio: document.getElementById('dato').innerText = p.input1;
+                
+                // Opzionale: rimanda un feedback a Glide
+                window.parent.postMessage({ result: "Tabella Pronta" }, "*");
+            }
+        });
+    </script>
+</body>
+</html>
     `);
   } catch (error) {
     res.status(500).send("Server Error: " + error.message);
