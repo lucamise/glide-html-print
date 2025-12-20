@@ -1,13 +1,9 @@
 export default function handler(req, res) {
   try {
-    // Leggiamo i parametri separati
     const { body, comp, date, user } = req.query;
 
-    if (!body) {
-      return res.status(400).send("Errore: Manca il contenuto (body).");
-    }
+    if (!body) return res.status(400).send("Errore: Manca il contenuto.");
 
-    // Decodifica "soft" per sicurezza
     const decodeSafe = (str) => {
         try { return decodeURIComponent(str || ""); } 
         catch (e) { return str || ""; }
@@ -20,82 +16,66 @@ export default function handler(req, res) {
 
     res.setHeader('Content-Type', 'text/html');
 
-    // Costruiamo la pagina
     res.send(`
       <!DOCTYPE html>
       <html lang="it">
       <head>
           <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <title>FlipJudge Print</title>
-          
+          <title>Print</title>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
-          
           <style>
-              body { padding: 20px; padding-bottom: 50px; }
-              
-              /* --- NUOVO BLOCCO: FIX PER TABELLE E CODICI LUNGHI --- */
-              table th, table td {
-                  white-space: normal !important;        /* Permette di andare a capo */
-                  text-overflow: clip !important;        /* Toglie i puntini ... */
-                  overflow: visible !important;          /* Mostra tutto il contenuto */
-                  overflow-wrap: break-word !important;  /* Spezza le parole lunghe (codici) */
-                  word-wrap: break-word !important;      /* Compatibilità */
-                  max-width: 100%;                       /* Evita che la tabella esca dal foglio */
-              }
-              
-              /* STILE HEADER AGGIORNATO */
-              .header-container { 
-                  border-bottom: 1px solid #000; 
-                  padding-bottom: 8px; 
-                  margin-bottom: 20px; 
-                  text-align: left; /* Allineato a SINISTRA */
+              /* 1. ELIMINA OGNI SCROLLBAR (Orizzontale e Verticale) */
+              html, body, div, section, main {
+                  overflow: visible !important;
+                  height: auto !important;
+                  max-height: none !important;
+                  width: 100% !important;
+                  max-width: 100% !important;
+                  margin: 0;
+                  padding: 0;
               }
 
-              /* Stile per la stampa */
+              body { padding: 20px; }
+
+              /* 2. FORZA LA TABELLA A OCCUPARE SOLO LA LARGHEZZA DEL FOGLIO */
+              table {
+                  width: 100% !important;
+                  table-layout: fixed !important; /* Obbliga le colonne a stare nel 100% */
+                  border-collapse: collapse !important;
+                  margin-top: 20px;
+              }
+
+              /* 3. VA A CAPO AUTOMATICAMENTE E NON SCROLLA */
+              th, td {
+                  white-space: normal !important;   /* Forza il testo ad andare a capo */
+                  word-break: break-all !important;  /* Spezza le parole lunghissime */
+                  overflow-wrap: break-word !important;
+                  border: 1px solid #ccc !important;
+                  padding: 8px !important;
+                  vertical-align: top;
+              }
+
+              .header-container { border-bottom: 1px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+              
               @media print {
                   @page { margin: 1cm; }
                   .no-print { display: none; }
-                  
-                  .print-footer-fix { 
-                      position: fixed; 
-                      bottom: 0; 
-                      left: 0; 
-                      width: 100%; 
-                      background: white; 
-                      border-top: 1px solid #ccc; 
-                      padding-top: 5px; 
-                      text-align: center; 
-                      font-size: 9px; /* Footer piccolo */
-                      color: #555; 
-                  }
-              }
-              
-              /* Footer per anteprima a video */
-              .print-footer-fix { 
-                  margin-top: 30px; 
-                  border-top: 1px solid #ccc; 
-                  padding-top: 5px; 
-                  text-align: center; 
-                  font-size: 9px; 
-                  color: #555; 
+                  .print-footer-fix { position: fixed; bottom: 0; width: 100%; font-size: 9px; text-align: center; }
               }
           </style>
       </head>
       <body>
-
           <div class="header-container">
-              <h1 style="margin: 0; font-size: 1.2rem; text-transform: uppercase;">FlipJudge AI Check</h1>
-              
-              <h3 style="margin: 2px 0 0; font-size: 0.9rem; font-weight: normal; color: #555;">Competition: ${cleanComp}</h3>
+              <h1 style="margin:0;">FlipJudge AI Check</h1>
+              <p>Competition: ${cleanComp}</p>
           </div>
 
-          <div>
+          <div id="content">
               ${cleanBody}
           </div>
 
           <div class="print-footer-fix">
-              FlipJudge AI Check | https://flipjudge.glide.page | Printed on ${cleanDate} | ${cleanUser}
+              Printed on ${cleanDate} | User: ${cleanUser}
           </div>
 
           <script>
@@ -105,6 +85,6 @@ export default function handler(req, res) {
       </html>
     `);
   } catch (error) {
-    res.status(500).send("Server Error: " + error.message);
+    res.status(500).send("Error: " + error.message);
   }
 }
