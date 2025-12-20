@@ -31,6 +31,7 @@ export default function handler(req, res) {
                   font-family: Arial, Helvetica, sans-serif !important;
                   background: white !important;
                   color: black !important;
+                  /* Box-sizing è fondamentale per non far sbordare i padding */
                   box-sizing: border-box !important;
               }
 
@@ -38,22 +39,27 @@ export default function handler(req, res) {
                   width: 100% !important;
                   margin: 0;
                   padding: 0;
+                  /* Evita scroll orizzontali fantasma */
+                  overflow-x: hidden !important; 
               }
 
-              /* 2. TITOLI */
+              /* 2. TITOLI RIDOTTI */
               h1, h2, h3, h4, h5, h6 {
                   text-align: left !important;
                   font-weight: bold !important;
-                  margin-top: 0.4rem !important;
-                  margin-bottom: 0.4rem !important;
+                  margin-top: 0.3rem !important;
+                  margin-bottom: 0.3rem !important;
               }
               h1 { font-size: 1.3rem !important; }
               h3 { font-size: 1rem !important; }
 
-              /* 3. TABELLA INTELLIGENTE */
+              /* 3. TABELLA: FIX PER L'OVERFLOW */
               table {
                   width: 100% !important;
+                  /* Cruciale: impedisce alla tabella di ignorare il 100% */
+                  max-width: 100% !important; 
                   margin: 1rem 0 !important;
+                  /* Usiamo auto per flessibilità, ma con vincoli sulle celle */
                   table-layout: auto !important; 
                   border-collapse: collapse !important;
               }
@@ -63,20 +69,25 @@ export default function handler(req, res) {
                   border: 1px solid black !important;
                   padding: 6px 8px !important;
                   font-size: 9pt !important;
-                  white-space: normal !important;
-                  word-break: keep-all !important; 
+                  
+                  /* Permette il wrapping se lo spazio finisce */
+                  white-space: normal !important; 
+                  /* Spezza le parole solo se sono più lunghe della cella stessa */
                   overflow-wrap: break-word !important;
+                  word-wrap: break-word !important;
+                  word-break: normal !important;
               }
 
               th {
                   background-color: #f2f2f2 !important;
-                  white-space: nowrap !important;
+                  /* Rimosso nowrap per evitare che colonne troppe larghe spingano la tabella fuori */
+                  font-weight: bold !important;
               }
 
-              /* 4. LAYOUT FISSO PER IL FOOTER */
+              /* 4. LAYOUT FISSO E MARGINI */
               body {
-                  /* Spazio in fondo per non far finire il testo sotto il footer */
-                  padding: 1cm 1.5cm 2cm 1.5cm !important; 
+                  /* Padding ridotto come richiesto (0.5cm sopra/sotto) */
+                  padding: 0.5cm 1.5cm 1.5cm 1.5cm !important; 
               }
 
               .header-container {
@@ -85,7 +96,7 @@ export default function handler(req, res) {
                   padding-bottom: 0.5rem;
               }
 
-              /* Footer visibile sia a video che in stampa */
+              /* Footer fisso */
               .print-footer {
                   position: fixed;
                   bottom: 0;
@@ -93,7 +104,7 @@ export default function handler(req, res) {
                   width: 100%;
                   background: white;
                   border-top: 1px solid #ccc;
-                  padding: 10px 1.5cm; /* Allineato ai margini del body */
+                  padding: 10px 1.5cm;
                   font-size: 8pt;
                   text-align: left;
                   z-index: 9999;
@@ -101,22 +112,23 @@ export default function handler(req, res) {
 
               @media print {
                   @page {
-                      margin: 0; /* Gestiamo i margini col body */
+                      margin: 0;
                       size: A4 portrait;
                   }
 
                   body {
-                      padding: 1.5cm !important;
+                      /* Margini ridotti in stampa */
+                      padding: 0.5cm 1.5cm 1.5cm 1.5cm !important;
                       margin: 0 !important;
                   }
 
                   .print-footer {
                       position: fixed;
                       bottom: 0;
-                      padding: 0.5cm 1.5cm !important;
+                      /* Assicura che sia visibile in stampa */
+                      padding: 0.3cm 1.5cm !important;
                   }
 
-                  /* Evita che la tabella si tronchi male tra le pagine */
                   tr { page-break-inside: avoid !important; }
               }
           </style>
