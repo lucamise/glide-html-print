@@ -26,11 +26,12 @@ export default function handler(req, res) {
           <link rel="stylesheet" href="https://unpkg.com/gutenberg-css@0.7/dist/themes/oldstyle.min.css" media="all">
 
           <style>
-              /* 1. FONT E MARGINI RIDOTTI */
+              /* 1. FONT ARIAL E RESET */
               * {
                   font-family: Arial, Helvetica, sans-serif !important;
                   background-color: white !important;
                   color: black !important;
+                  box-sizing: border-box !important;
               }
 
               html, body {
@@ -39,12 +40,12 @@ export default function handler(req, res) {
                   padding: 0 !important;
               }
 
+              /* 2. MARGINI RIDOTTI */
               body {
-                  /* Margini ridotti: 0.5cm sopra/sotto, 1.5cm ai lati */
                   padding: 0.5cm 1.5cm 1.5cm 1.5cm !important; 
               }
 
-              /* 2. TITOLI ALLINEATI A SINISTRA E PICCOLI */
+              /* 3. TITOLI PICCOLI ALLINEATI A SINISTRA */
               h1, h2, h3, h4, h5, h6 {
                   text-align: left !important;
                   font-weight: bold !important;
@@ -54,32 +55,40 @@ export default function handler(req, res) {
               h1 { font-size: 1.3rem !important; }
               h3 { font-size: 1rem !important; }
 
-              /* 3. TABELLE: DEFAULT GUTENBERG */
+              /* 4. TABELLA: DEFAULT GUTENBERG + MAX WIDTH */
               table {
                   width: 100% !important;
+                  max-width: 100% !important; /* Forza la tabella a stare nel foglio */
                   border-collapse: collapse !important;
                   margin: 1rem 0 !important;
-                  /* Nessuna forzatura su larghezza colonne o andata a capo */
+                  table-layout: auto !important;
+              }
+              
+              /* Sicurezza per evitare che contenuti lunghi (senza spazi) rompano il layout */
+              td, th {
+                  word-wrap: break-word !important;
+                  overflow-wrap: break-word !important;
               }
 
-              /* 4. FOOTER FISSO SU OGNI PAGINA */
+              /* 5. INTESTAZIONE E LINEA */
+              .header-container {
+                  border-bottom: 1.5px solid #000;
+                  margin-bottom: 1rem;
+                  padding-bottom: 0.3rem;
+              }
+
+              /* 6. FOOTER FISSO RIPETUTO IN INGLESE */
               .print-footer {
                   position: fixed;
                   bottom: 0;
                   left: 0;
                   width: 100%;
                   background: white;
-                  border-top: 1px solid #eee;
-                  padding: 5px 1.5cm; /* Allineato ai margini laterali */
+                  border-top: 1px solid #ddd;
+                  padding: 5px 1.5cm;
                   font-size: 8pt;
                   text-align: left;
                   z-index: 9999;
-              }
-
-              .header-container {
-                  border-bottom: 1.5px solid #000;
-                  margin-bottom: 0.8rem;
-                  padding-bottom: 0.3rem;
               }
 
               @media print {
@@ -94,7 +103,6 @@ export default function handler(req, res) {
                       position: fixed;
                       bottom: 0;
                   }
-                  /* Evita rotture brutte delle righe */
                   tr { page-break-inside: avoid !important; }
               }
           </style>
