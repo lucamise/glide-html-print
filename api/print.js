@@ -22,20 +22,23 @@ export default function handler(req, res) {
           <meta charset="UTF-8">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
           <style>
-              /* 1. RESET GLOBALE E COLORE */
-              * {
+              /* 1. RESET TOTALE DEI VINCOLI DI ALTEZZA E SCROLL */
+              *, html, body, div, section, main, article, table, tr, td {
                   background: white !important;
                   color: black !important;
                   box-sizing: border-box !important;
-                  box-shadow: none !important;
+                  /* Eliminiamo qualsiasi limite di altezza e forziamo la visibilità */
+                  max-height: none !important;
+                  height: auto !important;
+                  overflow: visible !important;
+                  overflow-x: visible !important;
+                  overflow-y: visible !important;
               }
 
               html, body {
                   width: 100% !important;
-                  height: auto !important; /* Permette alla pagina di crescere in altezza */
                   margin: 0 !important;
                   padding: 0 !important;
-                  overflow: visible !important; /* Indispensabile per non troncare il contenuto */
               }
 
               body {
@@ -43,25 +46,18 @@ export default function handler(req, res) {
                   display: block !important;
               }
 
-              /* 2. GESTIONE CONTENITORE */
-              #content-area {
-                  width: 100% !important;
-                  height: auto !important;
-                  overflow: visible !important;
-                  display: block !important;
-              }
-
-              /* 3. TABELLA: ADATTAMENTO E ANDATA A CAPO PULITA */
+              /* 2. FORZIAMO LA TABELLA A COMPORTARSI DA TABELLA (E NON DA ELEMENTO BLOCK) */
               table {
+                  display: table !important; /* mini.css a volte usa block per lo scroll */
                   width: 100% !important;
                   border-collapse: collapse !important;
-                  table-layout: auto !important; /* Permette alle colonne di gestire bene le parole */
-                  margin-top: 20px !important;
-                  page-break-inside: auto !important; /* Permette alla tabella di dividersi tra le pagine */
+                  table-layout: auto !important;
+                  margin: 20px 0 !important;
+                  page-break-inside: auto !important;
               }
 
               tr {
-                  page-break-inside: avoid !important; /* Evita di tagliare una riga a metà tra due pagine */
+                  page-break-inside: avoid !important;
                   page-break-after: auto !important;
               }
 
@@ -70,30 +66,21 @@ export default function handler(req, res) {
                   padding: 8px !important;
                   vertical-align: top !important;
                   font-size: 10pt !important;
-                  text-align: left !important;
-
-                  /* --- FIX ANDATA A CAPO: INTERE PAROLE --- */
-                  white-space: normal !important;      /* Permette il wrap */
-                  word-break: normal !important;      /* NON spezza le parole a metà */
-                  overflow-wrap: break-word !important; /* Va a capo tra parole, spezza solo se una parola è infinita */
-                  hyphens: auto !important;            /* Se supportato, usa la sillabazione corretta */
-              }
-
-              th {
-                  background-color: #f2f2f2 !important;
-                  font-weight: bold !important;
-              }
-
-              /* 4. REGOLE STAMPA */
-              @media print {
-                  @page { 
-                      margin: 0; 
-                      size: auto; 
-                  }
-                  body { padding: 1cm !important; }
-                  .no-print { display: none !important; }
                   
-                  /* Assicura che non ci siano scrollbar stampate */
+                  /* --- WRAP PULITO DELLE PAROLE --- */
+                  white-space: normal !important;
+                  word-break: normal !important;      /* Non spezza le parole */
+                  overflow-wrap: break-word !important; /* Va a capo solo se necessario */
+                  text-align: left !important;
+              }
+
+              th { background-color: #f2f2f2 !important; font-weight: bold !important; }
+
+              /* 3. PULIZIA EXTRA PER LA STAMPA */
+              @media print {
+                  @page { margin: 1cm; size: auto; }
+                  body { padding: 0 !important; }
+                  .no-print { display: none !important; }
                   ::-webkit-scrollbar { display: none !important; }
               }
 
