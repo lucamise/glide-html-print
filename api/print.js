@@ -26,76 +26,89 @@ export default function handler(req, res) {
           <link rel="stylesheet" href="https://unpkg.com/gutenberg-css@0.7/dist/themes/oldstyle.min.css" media="all">
 
           <style>
-              /* 1. RESET OVERRIDE PER GLIDE */
-              /* Gutenberg è ottimo, ma forziamo la visibilità per evitare ogni scrollbar */
-              html, body, #content-area, table {
-                  overflow: visible !important;
-                  height: auto !important;
-                  max-height: none !important;
+              /* 1. CARATTERE E ALLINEAMENTO GLOBALE */
+              * {
+                  font-family: Arial, Helvetica, sans-serif !important;
                   background: white !important;
+                  color: black !important;
+                  box-sizing: border-box !important;
+                  overflow: visible !important;
+                  max-height: none !important;
+              }
+
+              h1, h2, h3, h4, h5, h6 {
+                  text-align: left !important;
+                  margin-bottom: 0.5rem;
+                  font-weight: bold;
               }
 
               body {
-                  padding: 1.5cm !important; /* Margine interno al foglio */
+                  padding: 1.5cm !important;
+                  width: 100% !important;
               }
 
-              /* 2. TABELLA: PULIZIA E ALLINEAMENTO */
+              /* 2. TABELLA: ALLINEAMENTO COLONNE E GRIGLIA */
               table {
+                  display: table !important;
                   width: 100% !important;
                   border-collapse: collapse !important;
-                  table-layout: auto !important; /* Le colonne si adattano al testo */
+                  table-layout: auto !important; /* Le colonne si allargano in base al contenuto */
                   margin: 20px 0 !important;
-                  border: none !important; /* Rimuove bordo esterno al tag table */
+                  border: none !important; /* Nessun bordo esterno al tag table */
+              }
+
+              tr {
+                  page-break-inside: avoid !important;
               }
 
               th, td {
-                  border: 1px solid #333 !important; /* Bordo griglia interna */
+                  border: 1px solid #000 !important; /* Griglia interna nera decisa */
                   padding: 8px !important;
-                  vertical-align: top !important; /* Allineamento dritto in alto */
+                  vertical-align: top !important;
                   text-align: left !important;
+                  font-size: 10pt !important;
                   
                   /* Andata a capo pulita (parole intere) */
                   white-space: normal !important;
-                  word-wrap: break-word !important;
+                  word-break: normal !important;
                   overflow-wrap: break-word !important;
-                  font-size: 10pt !important;
               }
 
               th {
-                  background-color: #f5f5f5 !important;
-                  font-weight: bold !important;
+                  background-color: #f0f0f0 !important;
+                  font-size: 10pt !important;
               }
 
-              /* 3. INTESTAZIONE E PIÈ DI PAGINA */
+              /* 3. LAYOUT INTESTAZIONE */
               .header-container {
                   border-bottom: 2px solid #000;
-                  margin-bottom: 20px;
+                  margin-bottom: 25px;
                   padding-bottom: 10px;
+                  text-align: left;
               }
 
               .print-footer {
-                  margin-top: 30px;
-                  border-top: 1px solid #ccc;
+                  margin-top: 40px;
+                  border-top: 1px solid #000;
                   padding-top: 10px;
                   font-size: 9pt;
-                  text-align: center;
-                  color: #666;
+                  text-align: left; /* Coerenza con il resto del documento */
               }
 
               @media print {
                   @page {
-                      margin: 1.5cm; /* Lascia spazio per URL/Data del browser se attivo */
+                      margin: 1.5cm;
                   }
                   body {
-                      padding: 0 !important; /* Usa il margine della @page */
+                      padding: 0 !important;
                   }
               }
           </style>
       </head>
       <body>
           <div class="header-container">
-              <h1 style="margin:0; font-size: 20pt;">FlipJudge AI Check</h1>
-              <p style="margin:5px 0; font-size: 12pt;">Competition: <strong>${cleanComp}</strong></p>
+              <h1 style="margin:0; font-size: 22pt;">FlipJudge AI Check</h1>
+              <h3 style="margin:5px 0; font-size: 12pt; font-weight: normal;">Competition: <strong>${cleanComp}</strong></h3>
           </div>
 
           <div id="content-area">
@@ -108,8 +121,7 @@ export default function handler(req, res) {
 
           <script>
               window.onload = function() {
-                  // Aspettiamo che Gutenberg applichi i suoi stili prima di stampare
-                  setTimeout(() => { window.print(); }, 600);
+                  setTimeout(() => { window.print(); }, 500);
               };
           </script>
       </body>
