@@ -20,102 +20,96 @@ export default function handler(req, res) {
       <html lang="it">
       <head>
           <meta charset="UTF-8">
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
+          <title>FlipJudge Print</title>
+          
+          <link rel="stylesheet" href="https://unpkg.com/gutenberg-css@0.7/dist/gutenberg.min.css" media="all">
+          <link rel="stylesheet" href="https://unpkg.com/gutenberg-css@0.7/dist/themes/oldstyle.min.css" media="all">
+
           <style>
-              /* 1. RESET COLORI E VISIBILITÀ */
-              * {
-                  background: white !important;
-                  color: black !important;
-                  box-sizing: border-box !important;
-                  max-height: none !important;
+              /* 1. RESET OVERRIDE PER GLIDE */
+              /* Gutenberg è ottimo, ma forziamo la visibilità per evitare ogni scrollbar */
+              html, body, #content-area, table {
                   overflow: visible !important;
-              }
-
-              /* 2. MARGINI STANDARD */
-              @media print {
-                  @page { 
-                      margin: 1.5cm; 
-                      size: auto; 
-                  }
-                  body { 
-                      margin: 0 !important; 
-                      padding: 0 !important; 
-                      width: 100% !important;
-                  }
-                  .no-print { display: none !important; }
-              }
-
-              html, body { 
-                  width: 100% !important; 
                   height: auto !important;
-                  margin: 0; 
-                  padding: 0; 
+                  max-height: none !important;
+                  background: white !important;
               }
 
-              body { 
-                  padding: 1cm; 
-                  font-family: sans-serif;
+              body {
+                  padding: 1.5cm !important; /* Margine interno al foglio */
               }
 
-              /* 3. TABELLA ADATTIVA */
+              /* 2. TABELLA: PULIZIA E ALLINEAMENTO */
               table {
-                  display: table !important;
                   width: 100% !important;
                   border-collapse: collapse !important;
-                  table-layout: auto !important; 
+                  table-layout: auto !important; /* Le colonne si adattano al testo */
                   margin: 20px 0 !important;
-                  border: none !important; /* Rimosso bordo esterno della tabella */
-                  page-break-inside: auto !important;
-              }
-
-              tr {
-                  page-break-inside: avoid !important;
-                  page-break-after: auto !important;
+                  border: none !important; /* Rimuove bordo esterno al tag table */
               }
 
               th, td {
-                  border: 1px solid black !important; /* Griglia interna */
+                  border: 1px solid #333 !important; /* Bordo griglia interna */
                   padding: 8px !important;
-                  vertical-align: top !important;
+                  vertical-align: top !important; /* Allineamento dritto in alto */
                   text-align: left !important;
                   
-                  /* ANDATA A CAPO SULLE PAROLE INTERE */
+                  /* Andata a capo pulita (parole intere) */
                   white-space: normal !important;
-                  word-break: normal !important; 
-                  overflow-wrap: break-word !important; 
-                  font-size: 10pt !important; /* FONT FISSO */
+                  word-wrap: break-word !important;
+                  overflow-wrap: break-word !important;
+                  font-size: 10pt !important;
               }
 
-              th { 
-                  background-color: #f2f2f2 !important; 
-                  font-weight: bold !important; 
+              th {
+                  background-color: #f5f5f5 !important;
+                  font-weight: bold !important;
               }
 
+              /* 3. INTESTAZIONE E PIÈ DI PAGINA */
               .header-container {
-                  border-bottom: 2px solid black !important;
+                  border-bottom: 2px solid #000;
                   margin-bottom: 20px;
                   padding-bottom: 10px;
+              }
+
+              .print-footer {
+                  margin-top: 30px;
+                  border-top: 1px solid #ccc;
+                  padding-top: 10px;
+                  font-size: 9pt;
+                  text-align: center;
+                  color: #666;
+              }
+
+              @media print {
+                  @page {
+                      margin: 1.5cm; /* Lascia spazio per URL/Data del browser se attivo */
+                  }
+                  body {
+                      padding: 0 !important; /* Usa il margine della @page */
+                  }
               }
           </style>
       </head>
       <body>
           <div class="header-container">
-              <h1 style="margin:0; font-size: 18pt;">FlipJudge AI Check</h1>
-              <p style="margin:5px 0; font-size: 11pt;">Competition: <strong>${cleanComp}</strong></p>
+              <h1 style="margin:0; font-size: 20pt;">FlipJudge AI Check</h1>
+              <p style="margin:5px 0; font-size: 12pt;">Competition: <strong>${cleanComp}</strong></p>
           </div>
 
           <div id="content-area">
               ${cleanBody}
           </div>
 
-          <div style="margin-top: 30px; font-size: 8pt; text-align: center; border-top: 1px solid black !important; padding-top: 10px;">
-              FlipJudge AI Check | ${cleanDate} | ${cleanUser}
+          <div class="print-footer">
+              FlipJudge AI Check | Stampato il: ${cleanDate} | Utente: ${cleanUser}
           </div>
 
           <script>
               window.onload = function() {
-                  // Lancio della stampa immediato senza calcoli sul font
-                  setTimeout(() => { window.print(); }, 500);
+                  // Aspettiamo che Gutenberg applichi i suoi stili prima di stampare
+                  setTimeout(() => { window.print(); }, 600);
               };
           </script>
       </body>
