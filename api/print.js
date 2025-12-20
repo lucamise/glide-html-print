@@ -22,10 +22,9 @@ export default function handler(req, res) {
           <meta charset="UTF-8">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
           <style>
-              /* 1. RESET SFONDO E SCROLLBAR */
+              /* 1. RESET GLOBALE E COLORE */
               * {
                   background: white !important;
-                  background-color: white !important;
                   color: black !important;
                   box-sizing: border-box !important;
                   box-shadow: none !important;
@@ -33,71 +32,82 @@ export default function handler(req, res) {
 
               html, body {
                   width: 100% !important;
+                  height: auto !important; /* Permette alla pagina di crescere in altezza */
                   margin: 0 !important;
                   padding: 0 !important;
-                  overflow: visible !important;
+                  overflow: visible !important; /* Indispensabile per non troncare il contenuto */
               }
 
               body {
-                  padding: 10mm !important;
+                  padding: 15mm !important;
+                  display: block !important;
               }
 
-              /* 2. KILL SCROLLBAR RESIDUE */
-              div, section, main, #content-area {
-                  overflow: visible !important;
-                  border: none !important; /* Rimuove bordi dai div contenitori */
-                  padding: 0 !important;
+              /* 2. GESTIONE CONTENITORE */
+              #content-area {
                   width: 100% !important;
-                  max-width: 100% !important;
+                  height: auto !important;
+                  overflow: visible !important;
+                  display: block !important;
               }
 
-              /* 3. TABELLA: LARGHEZZA PIENA E BORDI INTERNI */
+              /* 3. TABELLA: ADATTAMENTO E ANDATA A CAPO PULITA */
               table {
                   width: 100% !important;
                   border-collapse: collapse !important;
-                  table-layout: fixed !important; /* Forza il wrap e il 100% */
+                  table-layout: auto !important; /* Permette alle colonne di gestire bene le parole */
                   margin-top: 20px !important;
-                  border: none !important; /* Rimuove il bordo esterno doppio */
+                  page-break-inside: auto !important; /* Permette alla tabella di dividersi tra le pagine */
               }
 
-              /* Qui rimettiamo i bordi che volevi solo per le celle */
+              tr {
+                  page-break-inside: avoid !important; /* Evita di tagliare una riga a metà tra due pagine */
+                  page-break-after: auto !important;
+              }
+
               th, td {
-                  border: 1px solid black !important; /* Bordo cella visibile */
-                  padding: 6px !important;
-                  white-space: normal !important;
-                  word-wrap: break-word !important;
-                  overflow-wrap: break-word !important;
-                  word-break: break-all !important;
+                  border: 1px solid black !important;
+                  padding: 8px !important;
                   vertical-align: top !important;
                   font-size: 10pt !important;
                   text-align: left !important;
+
+                  /* --- FIX ANDATA A CAPO: INTERE PAROLE --- */
+                  white-space: normal !important;      /* Permette il wrap */
+                  word-break: normal !important;      /* NON spezza le parole a metà */
+                  overflow-wrap: break-word !important; /* Va a capo tra parole, spezza solo se una parola è infinita */
+                  hyphens: auto !important;            /* Se supportato, usa la sillabazione corretta */
               }
 
               th {
-                  background-color: #eee !important; /* Un minimo di grigio per le testate */
+                  background-color: #f2f2f2 !important;
                   font-weight: bold !important;
               }
 
-              /* Rimuove scrollbar grafiche */
-              ::-webkit-scrollbar { display: none !important; }
-
+              /* 4. REGOLE STAMPA */
               @media print {
-                  @page { margin: 0; size: portrait; }
-                  .no-print { display: none !important; }
+                  @page { 
+                      margin: 0; 
+                      size: auto; 
+                  }
                   body { padding: 1cm !important; }
+                  .no-print { display: none !important; }
+                  
+                  /* Assicura che non ci siano scrollbar stampate */
+                  ::-webkit-scrollbar { display: none !important; }
               }
 
               .header-container {
                   border-bottom: 2px solid black !important;
-                  margin-bottom: 10px;
+                  margin-bottom: 15px;
                   padding-bottom: 5px;
               }
           </style>
       </head>
       <body>
           <div class="header-container">
-              <h1 style="margin:0; font-size: 18pt; border:none !important;">FlipJudge AI Check</h1>
-              <p style="margin:2px 0; font-size: 11pt; border:none !important;">Competition: <strong>${cleanComp}</strong></p>
+              <h1 style="margin:0; font-size: 18pt;">FlipJudge AI Check</h1>
+              <p style="margin:5px 0; font-size: 11pt;">Competition: <strong>${cleanComp}</strong></p>
           </div>
 
           <div id="content-area">
@@ -110,7 +120,7 @@ export default function handler(req, res) {
 
           <script>
               window.onload = function() {
-                  setTimeout(() => { window.print(); }, 400);
+                  setTimeout(() => { window.print(); }, 500);
               };
           </script>
       </body>
