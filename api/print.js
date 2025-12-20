@@ -22,68 +22,86 @@ export default function handler(req, res) {
           <meta charset="UTF-8">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
           <style>
-              /* --- 1. KILL DEFINITIVO DI OGNI SCROLLBAR --- */
-              /* Applichiamo overflow visible a TUTTI gli elementi per evitare contenitori nascosti */
-              *, html, body, div, section, main, article {
-                  overflow: visible !important;
-                  overflow-x: visible !important;
-                  overflow-y: visible !important;
-                  height: auto !important;
-                  max-height: none !important;
+              /* 1. RESET TOTALE DELLE DIMENSIONI */
+              * { 
+                  box-sizing: border-box !important; /* Impedisce al padding di allargare i div */
+                  -webkit-print-color-adjust: exact;
               }
 
-              body { 
-                  margin: 0; 
-                  padding: 20px; 
-                  width: 100% !important; 
+              html, body {
+                  width: 100% !important;
+                  margin: 0 !important;
+                  padding: 0 !important;
+                  overflow-x: hidden !important; /* Nasconde lo sforamento orizzontale */
+              }
+
+              body {
+                  padding: 15px !important; /* Unico margine interno ammesso */
                   display: block !important;
               }
 
-              /* --- 2. LARGHEZZA FISSA E WRAP TESTO --- */
+              /* 2. FIX PER IL DIV CONTENT-AREA */
+              #content-area {
+                  width: 100% !important;
+                  max-width: 100% !important;
+                  margin: 0 !important;
+                  padding: 0 !important;
+                  display: block !important;
+                  overflow: visible !important;
+              }
+
+              /* 3. TRATTAMENTO D'URTO PER LE TABELLE */
               table {
                   width: 100% !important;
                   max-width: 100% !important;
-                  table-layout: fixed !important; /* Fondamentale: le colonne non possono uscire dal bordo */
+                  table-layout: fixed !important; /* OBBLIGA le colonne a stare nel foglio */
                   border-collapse: collapse !important;
-                  margin-bottom: 50px !important;
+                  margin: 20px 0 !important;
               }
 
               th, td {
                   word-wrap: break-word !important;
                   overflow-wrap: break-word !important;
-                  word-break: break-all !important; /* Spezza codici o testi lunghi senza spazi */
-                  white-space: normal !important;   /* Impedisce al testo di stare su una riga sola */
-                  border: 1px solid #ccc !important;
+                  word-break: break-all !important; /* Spezza parole lunghe se necessario */
+                  white-space: normal !important;   /* Forza l'andata a capo */
+                  border: 1px solid #ddd !important;
                   padding: 8px !important;
-                  vertical-align: top !important;
+                  font-size: 11px !important;      /* Riduce leggermente il font per sicurezza */
               }
 
-              /* Fix per le immagini o icone che potrebbero allargare la tabella */
-              img { max-width: 100% !important; height: auto !important; }
-
-              /* --- 3. STILE HEADER E FOOTER --- */
-              .header-container { border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
-              
+              /* 4. REGOLE SPECIFICHE PER LA STAMPA */
               @media print {
-                  @page { margin: 1cm; size: portrait; }
+                  @page { 
+                      margin: 1cm; 
+                      size: portrait; 
+                  }
+                  
+                  body { padding: 0 !important; }
+                  
                   .no-print { display: none !important; }
+
                   .print-footer-fix { 
                       position: fixed; 
                       bottom: 0; 
-                      left: 0;
                       width: 100%; 
-                      font-size: 10px; 
+                      font-size: 9px; 
                       text-align: center;
-                      background: white;
-                      border-top: 1px solid #ccc;
+                      border-top: 1px solid #eee;
+                      padding-top: 5px;
                   }
+              }
+
+              .header-container { 
+                  border-bottom: 2px solid #000; 
+                  margin-bottom: 15px; 
+                  width: 100%; 
               }
           </style>
       </head>
       <body>
           <div class="header-container">
-              <h1 style="margin:0; font-size: 24px;">FlipJudge AI Check</h1>
-              <p style="margin:5px 0;">Competition: <strong>${cleanComp}</strong></p>
+              <h1 style="margin:0; font-size: 20px;">FlipJudge AI Check</h1>
+              <p style="margin:5px 0; font-size: 14px;">Competition: <strong>${cleanComp}</strong></p>
           </div>
 
           <div id="content-area">
@@ -96,8 +114,7 @@ export default function handler(req, res) {
 
           <script>
               window.onload = function() { 
-                  // Piccolo delay per calcolare il layout prima di lanciare la stampa
-                  setTimeout(() => { window.print(); }, 300); 
+                  setTimeout(() => { window.print(); }, 400); 
               };
           </script>
       </body>
