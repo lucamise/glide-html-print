@@ -20,13 +20,13 @@ export default function handler(req, res) {
       <html lang="it">
       <head>
           <meta charset="UTF-8">
-          <title>FlipJudge Print</title>
+          <title>FlipJudge Print Preview</title>
           
           <link rel="stylesheet" href="https://unpkg.com/gutenberg-css@0.7/dist/gutenberg.min.css" media="all">
           <link rel="stylesheet" href="https://unpkg.com/gutenberg-css@0.7/dist/themes/oldstyle.min.css" media="all">
 
           <style>
-              /* 1. FONT E STILE BASE */
+              /* 1. FONT E RESET GLOBALE */
               * {
                   font-family: Arial, Helvetica, sans-serif !important;
                   background-color: white !important;
@@ -34,25 +34,16 @@ export default function handler(req, res) {
                   box-sizing: border-box !important;
               }
 
-              html, body {
-                  width: 100% !important;
-                  margin: 0 !important;
-                  padding: 0 !important;
-              }
-
-              /* 2. GERARCHIA TITOLI CORRETTA (h1 > h2 > h3) */
+              /* 2. GERARCHIA TITOLI */
               h1, h2, h3, h4, h5, h6 {
                   text-align: left !important;
                   font-weight: bold !important;
                   margin: 0.5rem 0 0.2rem 0 !important;
                   line-height: 1.2 !important;
               }
-
-              h1 { font-size: 1.3rem !important; }   /* Titolo principale */
-              h2 { font-size: 1.15rem !important; }  /* Sotto-titolo */
-              h3 { font-size: 1.0rem !important; }   /* Titolo sezione */
-              h4 { font-size: 0.95rem !important; }
-              h5, h6 { font-size: 0.9rem !important; }
+              h1 { font-size: 1.3rem !important; }
+              h2 { font-size: 1.15rem !important; }
+              h3 { font-size: 1.0rem !important; }
 
               /* 3. INTESTAZIONE BI-LATERALE */
               .header-container {
@@ -70,20 +61,10 @@ export default function handler(req, res) {
                   margin-top: 2px;
               }
 
-              .comp-name {
-                  font-size: 10pt;
-                  text-align: left;
-                  flex: 1;
-              }
+              .comp-name { font-size: 10pt; flex: 1; text-align: left; }
+              .print-meta { font-size: 8pt; flex: 1; text-align: right; color: #444; }
 
-              .print-meta {
-                  font-size: 8pt;
-                  color: #444;
-                  text-align: right;
-                  flex: 1;
-              }
-
-              /* 4. TABELLA: DEFAULT GUTENBERG + MAX WIDTH 100% */
+              /* 4. TABELLA: MASSIMA LARGHEZZA 100% */
               table {
                   width: 100% !important;
                   max-width: 100% !important;
@@ -100,48 +81,64 @@ export default function handler(req, res) {
                   word-wrap: break-word !important;
                   overflow-wrap: break-word !important;
               }
+              th { background-color: #f2f2f2 !important; }
 
-              th {
-                  background-color: #f2f2f2 !important;
-                  font-weight: bold !important;
+              /* --- LOGICA MARGINI SCHERMO VS STAMPA --- */
+
+              /* STILE PER LA VISUALIZZAZIONE WEB (Anteprima) */
+              @media screen {
+                  body {
+                      background-color: #f0f0f0 !important; /* Grigio fuori dal foglio */
+                      display: flex;
+                      justify-content: center;
+                      padding: 2rem 0;
+                  }
+                  #page-container {
+                      background-color: white !important;
+                      width: 210mm; /* Larghezza A4 */
+                      min-height: 297mm;
+                      padding: 1.5cm !important; /* I margini che vedi a video */
+                      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                  }
               }
 
-              /* 5. MARGINI DI STAMPA */
+              /* STILE PER LA STAMPA */
               @media print {
                   @page {
-                      margin: 1.5cm;
+                      margin: 1.5cm; /* Margini fisici sul foglio */
                       size: A4 portrait;
                   }
-                  
                   body {
-                      margin: 0 !important;
+                      background-color: white !important;
                       padding: 0 !important;
+                      margin: 0 !important;
                   }
-
+                  #page-container {
+                      width: 100% !important;
+                      padding: 0 !important;
+                      box-shadow: none !important;
+                  }
                   tr { page-break-inside: avoid !important; }
-              }
-
-              /* Visualizzazione a video */
-              body {
-                  padding: 1.5cm;
               }
           </style>
       </head>
       <body>
-          <div class="header-container">
-              <h1>FlipJudge AI Check</h1>
-              <div class="header-meta-row">
-                  <div class="comp-name">
-                      Competition: <strong>${cleanComp}</strong>
-                  </div>
-                  <div class="print-meta">
-                      Printed on: ${cleanDate} | User: ${cleanUser}
+          <div id="page-container">
+              <div class="header-container">
+                  <h1>FlipJudge AI Check</h1>
+                  <div class="header-meta-row">
+                      <div class="comp-name">
+                          Competition: <strong>${cleanComp}</strong>
+                      </div>
+                      <div class="print-meta">
+                          Printed on: ${cleanDate} | User: ${cleanUser}
+                      </div>
                   </div>
               </div>
-          </div>
 
-          <div id="content-area">
-              ${cleanBody}
+              <div id="content-area">
+                  ${cleanBody}
+              </div>
           </div>
 
           <script>
