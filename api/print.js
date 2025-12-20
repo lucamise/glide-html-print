@@ -32,49 +32,68 @@ export default function handler(req, res) {
                   background: white !important;
                   color: black !important;
                   box-sizing: border-box !important;
-                  overflow: visible !important;
-                  max-height: none !important;
               }
 
-              /* 2. RIDUZIONE E ALLINEAMENTO TITOLI */
+              html, body {
+                  width: 100% !important;
+                  margin: 0 !important;
+                  padding: 0 !important;
+                  /* Impedisce lo scroll orizzontale che causa il taglio in stampa */
+                  overflow-x: hidden !important; 
+              }
+
+              /* 2. TITOLI RIDOTTI E ALLINEATI A SINISTRA */
               h1, h2, h3, h4, h5, h6 {
                   text-align: left !important;
                   font-weight: bold !important;
                   margin-top: 0.5rem !important;
                   margin-bottom: 0.5rem !important;
               }
-
-              h1 { font-size: 1.4rem !important; } /* Dimensione ridotta */
-              h2 { font-size: 1.2rem !important; }
+              h1 { font-size: 1.4rem !important; }
               h3 { font-size: 1.1rem !important; }
-              h4, h5, h6 { font-size: 1rem !important; }
 
               body {
                   padding: 1cm !important;
-                  width: 100% !important;
               }
 
-              /* 3. TABELLE: DEFAULT GUTENBERG */
-              /* Rimuoviamo i nostri bordi custom per lasciare quelli di Gutenberg */
+              /* 3. FIX DEFINITIVO LARGHEZZA TABELLA */
               table {
                   width: 100% !important;
+                  max-width: 100% !important; /* Forza la tabella a non superare mai il foglio */
                   margin: 1rem 0 !important;
-                  /* Gutenberg gestisce bordi e spaziature internamente */
+                  table-layout: auto !important;
+                  border-collapse: collapse !important;
               }
 
               th, td {
                   vertical-align: top !important;
                   text-align: left !important;
-                  padding: 0.5rem !important;
+                  padding: 6px !important;
                   font-size: 10pt !important;
+                  
+                  /* GESTIONE ANDATA A CAPO INTELLIGENTE */
+                  white-space: normal !important;
+                  word-break: normal !important; /* Non spezza le parole a caso */
+                  overflow-wrap: anywhere !important; /* Spezza la parola SOLO se è l'unico modo per stare nel foglio */
               }
 
-              /* 4. LAYOUT INTESTAZIONE E FOOTER */
+              /* 4. LAYOUT STAMPA */
+              @media print {
+                  @page {
+                      margin: 1.5cm;
+                      size: A4 portrait;
+                  }
+                  body {
+                      padding: 0 !important;
+                  }
+                  /* Nasconde eventuali elementi che potrebbero causare overflow */
+                  .no-print { display: none !important; }
+              }
+
               .header-container {
                   border-bottom: 1.5px solid #000;
                   margin-bottom: 1.5rem;
                   padding-bottom: 0.5rem;
-                  text-align: left;
               }
 
               .print-footer {
@@ -82,17 +101,7 @@ export default function handler(req, res) {
                   border-top: 1px solid #ddd;
                   padding-top: 0.5rem;
                   font-size: 8pt;
-                  text-align: left;
                   color: #444;
-              }
-
-              @media print {
-                  @page {
-                      margin: 1.5cm;
-                  }
-                  body {
-                      padding: 0 !important;
-                  }
               }
           </style>
       </head>
