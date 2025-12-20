@@ -22,7 +22,7 @@ export default function handler(req, res) {
           <meta charset="UTF-8">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
           <style>
-              /* 1. RESET COLORI E SFONDO */
+              /* 1. RESET COLORI E VISIBILITÀ */
               * {
                   background: white !important;
                   color: black !important;
@@ -31,10 +31,10 @@ export default function handler(req, res) {
                   overflow: visible !important;
               }
 
-              /* 2. MARGINI STANDARD (Ripristinati) */
+              /* 2. MARGINI STANDARD */
               @media print {
                   @page { 
-                      margin: 1.5cm; /* Margine standard gestito dal browser */
+                      margin: 1.5cm; 
                       size: auto; 
                   }
                   body { 
@@ -53,7 +53,7 @@ export default function handler(req, res) {
               }
 
               body { 
-                  padding: 1cm; /* Spaziatura per la visualizzazione a video */
+                  padding: 1cm; 
                   font-family: sans-serif;
               }
 
@@ -64,7 +64,7 @@ export default function handler(req, res) {
                   border-collapse: collapse !important;
                   table-layout: auto !important; 
                   margin: 20px 0 !important;
-                  border: none !important; /* Rimosso bordo esterno del tag table */
+                  border: none !important; /* Rimosso bordo esterno della tabella */
                   page-break-inside: auto !important;
               }
 
@@ -79,11 +79,11 @@ export default function handler(req, res) {
                   vertical-align: top !important;
                   text-align: left !important;
                   
-                  /* ANDATA A CAPO PULITA */
+                  /* ANDATA A CAPO SULLE PAROLE INTERE */
                   white-space: normal !important;
                   word-break: normal !important; 
                   overflow-wrap: break-word !important; 
-                  font-size: 10pt; /* Font base */
+                  font-size: 10pt !important; /* FONT FISSO */
               }
 
               th { 
@@ -114,23 +114,7 @@ export default function handler(req, res) {
 
           <script>
               window.onload = function() {
-                  const tables = document.querySelectorAll('table');
-                  const container = document.getElementById('content-area');
-                  const maxWidth = container.offsetWidth;
-
-                  // Riduce il font se la tabella è troppo larga per il foglio
-                  tables.forEach(table => {
-                      let fontSize = 10;
-                      const minFontSize = 7; 
-                      while (table.offsetWidth > maxWidth && fontSize > minFontSize) {
-                          fontSize -= 0.5;
-                          table.querySelectorAll('td, th').forEach(cell => {
-                              cell.style.fontSize = fontSize + 'pt';
-                          });
-                      }
-                  });
-
-                  // Lancio della stampa
+                  // Lancio della stampa immediato senza calcoli sul font
                   setTimeout(() => { window.print(); }, 500);
               };
           </script>
