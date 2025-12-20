@@ -22,42 +22,40 @@ export default function handler(req, res) {
           <meta charset="UTF-8">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
           <style>
-              /* 1. RESET GLOBALE E COLORI */
-              *, html, body, div, section, main, article, table, tr, td {
+              /* 1. RESET COLORI E SFONDO */
+              * {
                   background: white !important;
                   color: black !important;
                   box-sizing: border-box !important;
                   max-height: none !important;
-                  height: auto !important;
                   overflow: visible !important;
               }
 
-              /* 2. GESTIONE MARGINI E TRUCCO ANTI-URL */
+              /* 2. MARGINI STANDARD (Ripristinati) */
               @media print {
                   @page { 
-                      margin: 0; /* Prova a rimuovere header/footer del browser */
+                      margin: 1.5cm; /* Margine standard gestito dal browser */
                       size: auto; 
                   }
-                  
                   body { 
-                      margin: 0 !important;
-                      /* RIMETTIAMO I MARGINI INTERNI (sopra, lati, sotto) */
-                      padding: 20mm 15mm 15mm 15mm !important; 
+                      margin: 0 !important; 
+                      padding: 0 !important; 
                       width: 100% !important;
                   }
-
                   .no-print { display: none !important; }
-                  ::-webkit-scrollbar { display: none !important; }
               }
 
               html, body { 
                   width: 100% !important; 
-                  margin: 0 !important; 
-                  padding: 0 !important; 
+                  height: auto !important;
+                  margin: 0; 
+                  padding: 0; 
               }
 
-              /* Visualizzazione a video */
-              body { padding: 20mm 15mm; display: block !important; }
+              body { 
+                  padding: 1cm; /* Spaziatura per la visualizzazione a video */
+                  font-family: sans-serif;
+              }
 
               /* 3. TABELLA ADATTIVA */
               table {
@@ -66,7 +64,7 @@ export default function handler(req, res) {
                   border-collapse: collapse !important;
                   table-layout: auto !important; 
                   margin: 20px 0 !important;
-                  border: none !important;
+                  border: none !important; /* Rimosso bordo esterno del tag table */
                   page-break-inside: auto !important;
               }
 
@@ -76,23 +74,27 @@ export default function handler(req, res) {
               }
 
               th, td {
-                  border: 1px solid black !important;
+                  border: 1px solid black !important; /* Griglia interna */
                   padding: 8px !important;
                   vertical-align: top !important;
                   text-align: left !important;
+                  
+                  /* ANDATA A CAPO PULITA */
                   white-space: normal !important;
                   word-break: normal !important; 
                   overflow-wrap: break-word !important; 
-                  font-size: 10pt; /* Punto di partenza */
+                  font-size: 10pt; /* Font base */
               }
 
-              th { background-color: #f2f2f2 !important; font-weight: bold !important; }
+              th { 
+                  background-color: #f2f2f2 !important; 
+                  font-weight: bold !important; 
+              }
 
               .header-container {
                   border-bottom: 2px solid black !important;
                   margin-bottom: 20px;
                   padding-bottom: 10px;
-                  width: 100%;
               }
           </style>
       </head>
@@ -107,7 +109,7 @@ export default function handler(req, res) {
           </div>
 
           <div style="margin-top: 30px; font-size: 8pt; text-align: center; border-top: 1px solid black !important; padding-top: 10px;">
-              FlipJudge AI Check | Printed: ${cleanDate} | User: ${cleanUser}
+              FlipJudge AI Check | ${cleanDate} | ${cleanUser}
           </div>
 
           <script>
@@ -116,7 +118,7 @@ export default function handler(req, res) {
                   const container = document.getElementById('content-area');
                   const maxWidth = container.offsetWidth;
 
-                  // Riduzione font se la tabella sfora lateralmente
+                  // Riduce il font se la tabella è troppo larga per il foglio
                   tables.forEach(table => {
                       let fontSize = 10;
                       const minFontSize = 7; 
@@ -128,7 +130,8 @@ export default function handler(req, res) {
                       }
                   });
 
-                  setTimeout(() => { window.print(); }, 600);
+                  // Lancio della stampa
+                  setTimeout(() => { window.print(); }, 500);
               };
           </script>
       </body>
