@@ -22,14 +22,14 @@ export default function handler(req, res) {
           <meta charset="UTF-8">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
           <style>
-              /* 1. RESET TOTALE DEI VINCOLI E COLORI */
+              /* 1. RESET TOTALE */
               *, html, body, div, section, main, article, table, tr, td {
                   background: white !important;
                   color: black !important;
                   box-sizing: border-box !important;
-                  max-height: none !important; /* Rimosso ogni limite di altezza */
+                  max-height: none !important;
                   height: auto !important;
-                  overflow: visible !important; /* Forza la visibilità totale (no scroll) */
+                  overflow: visible !important;
               }
 
               html, body {
@@ -43,14 +43,15 @@ export default function handler(req, res) {
                   display: block !important;
               }
 
-              /* 2. TABELLA: RIMOSSO IL BORDO ESTERNO */
+              /* 2. TABELLA ADATTIVA */
               table {
                   display: table !important;
                   width: 100% !important;
                   border-collapse: collapse !important;
-                  table-layout: auto !important;
+                  /* 'auto' permette alle colonne di ridimensionarsi in base al contenuto */
+                  table-layout: auto !important; 
                   margin: 20px 0 !important;
-                  border: none !important; /* <--- BORDO TAG TABLE RIMOSSO */
+                  border: none !important; /* Rimosso bordo esterno del tag table */
                   page-break-inside: auto !important;
               }
 
@@ -59,15 +60,15 @@ export default function handler(req, res) {
                   page-break-after: auto !important;
               }
 
-              /* 3. BORDI SOLO SULLE CELLE */
+              /* 3. BORDI E WRAP SULLE CELLE */
               th, td {
-                  border: 1px solid black !important; /* Manteniamo la griglia interna */
+                  border: 1px solid black !important; /* Griglia interna mantenuta */
                   padding: 8px !important;
                   vertical-align: top !important;
                   font-size: 10pt !important;
                   text-align: left !important;
 
-                  /* ANDATA A CAPO PULITA (PAROLE INTERE) */
+                  /* ANDATA A CAPO CORRETTA */
                   white-space: normal !important;
                   word-break: normal !important; 
                   overflow-wrap: break-word !important; 
@@ -78,7 +79,7 @@ export default function handler(req, res) {
                   font-weight: bold !important; 
               }
 
-              /* 4. FIX STAMPA */
+              /* 4. REGOLE STAMPA */
               @media print {
                   @page { margin: 1cm; size: auto; }
                   body { padding: 0 !important; }
@@ -90,7 +91,6 @@ export default function handler(req, res) {
                   border-bottom: 2px solid black !important;
                   margin-bottom: 15px;
                   padding-bottom: 5px;
-                  width: 100%;
               }
           </style>
       </head>
