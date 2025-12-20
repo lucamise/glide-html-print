@@ -22,14 +22,13 @@ export default function handler(req, res) {
           <meta charset="UTF-8">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
           <style>
-              /* 1. RESET TOTALE AGGRESSIVO */
+              /* 1. RESET SFONDO E SCROLLBAR */
               * {
                   background: white !important;
                   background-color: white !important;
                   color: black !important;
                   box-sizing: border-box !important;
                   box-shadow: none !important;
-                  border: none !important; /* Rimuove bordi da TUTTO */
               }
 
               html, body {
@@ -37,54 +36,59 @@ export default function handler(req, res) {
                   margin: 0 !important;
                   padding: 0 !important;
                   overflow: visible !important;
-                  -webkit-print-color-adjust: exact;
               }
 
               body {
                   padding: 10mm !important;
               }
 
-              /* 2. TABELLA SENZA BORDI E SENZA PADDING */
-              table {
-                  width: 100% !important;
-                  border: none !important;         /* Rimuove bordo esterno */
-                  border-collapse: collapse !important;
-                  padding: 0 !important;          /* Rimuove padding tabella */
-                  margin: 0 !important;
-                  table-layout: fixed !important;
+              /* 2. KILL SCROLLBAR RESIDUE */
+              div, section, main, #content-area {
                   overflow: visible !important;
+                  border: none !important; /* Rimuove bordi dai div contenitori */
+                  padding: 0 !important;
+                  width: 100% !important;
+                  max-width: 100% !important;
               }
 
+              /* 3. TABELLA: LARGHEZZA PIENA E BORDI INTERNI */
+              table {
+                  width: 100% !important;
+                  border-collapse: collapse !important;
+                  table-layout: fixed !important; /* Forza il wrap e il 100% */
+                  margin-top: 20px !important;
+                  border: none !important; /* Rimuove il bordo esterno doppio */
+              }
+
+              /* Qui rimettiamo i bordi che volevi solo per le celle */
               th, td {
-                  border: none !important;         /* Rimuove bordi celle */
-                  padding: 0 !important;          /* Rimuove padding celle */
-                  margin: 0 !important;
+                  border: 1px solid black !important; /* Bordo cella visibile */
+                  padding: 6px !important;
                   white-space: normal !important;
                   word-wrap: break-word !important;
                   overflow-wrap: break-word !important;
                   word-break: break-all !important;
                   vertical-align: top !important;
                   font-size: 10pt !important;
+                  text-align: left !important;
               }
 
-              /* 3. CONTENITORE CONTENT-AREA */
-              #content-area {
-                  width: 100% !important;
-                  overflow: visible !important;
-                  border: none !important;
-                  padding: 0 !important;
+              th {
+                  background-color: #eee !important; /* Un minimo di grigio per le testate */
+                  font-weight: bold !important;
               }
 
-              /* Rimuove scrollbar residue */
+              /* Rimuove scrollbar grafiche */
               ::-webkit-scrollbar { display: none !important; }
 
               @media print {
                   @page { margin: 0; size: portrait; }
                   .no-print { display: none !important; }
+                  body { padding: 1cm !important; }
               }
 
               .header-container {
-                  border-bottom: 1px solid #000 !important; /* L'unica linea che lasciamo */
+                  border-bottom: 2px solid black !important;
                   margin-bottom: 10px;
                   padding-bottom: 5px;
               }
@@ -92,15 +96,15 @@ export default function handler(req, res) {
       </head>
       <body>
           <div class="header-container">
-              <h1 style="margin:0; font-size: 18pt;">FlipJudge AI Check</h1>
-              <p style="margin:2px 0; font-size: 11pt;">Competition: ${cleanComp}</p>
+              <h1 style="margin:0; font-size: 18pt; border:none !important;">FlipJudge AI Check</h1>
+              <p style="margin:2px 0; font-size: 11pt; border:none !important;">Competition: <strong>${cleanComp}</strong></p>
           </div>
 
           <div id="content-area">
               ${cleanBody}
           </div>
 
-          <div style="margin-top: 20px; font-size: 8pt; text-align: center; border-top: 0.5px solid #eee !important;">
+          <div style="margin-top: 30px; font-size: 8pt; text-align: center; border-top: 1px solid black !important; padding-top: 5px;">
               FlipJudge AI Check | ${cleanDate} | ${cleanUser}
           </div>
 
