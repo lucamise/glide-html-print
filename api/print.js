@@ -22,7 +22,7 @@ export default function handler(req, res) {
           <meta charset="UTF-8">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
           <style>
-              /* 1. RESET TOTALE E COLORE */
+              /* 1. RESET GLOBALE E COLORI */
               *, html, body, div, section, main, article, table, tr, td {
                   background: white !important;
                   color: black !important;
@@ -32,16 +32,34 @@ export default function handler(req, res) {
                   overflow: visible !important;
               }
 
+              /* 2. GESTIONE MARGINI E TRUCCO ANTI-URL */
               @media print {
-                  @page { margin: 0; size: auto; }
-                  body { margin: 0 !important; padding: 10mm !important; }
+                  @page { 
+                      margin: 0; /* Prova a rimuovere header/footer del browser */
+                      size: auto; 
+                  }
+                  
+                  body { 
+                      margin: 0 !important;
+                      /* RIMETTIAMO I MARGINI INTERNI (sopra, lati, sotto) */
+                      padding: 20mm 15mm 15mm 15mm !important; 
+                      width: 100% !important;
+                  }
+
                   .no-print { display: none !important; }
+                  ::-webkit-scrollbar { display: none !important; }
               }
 
-              html, body { width: 100% !important; margin: 0 !important; padding: 0 !important; }
-              body { padding: 10mm; display: block !important; }
+              html, body { 
+                  width: 100% !important; 
+                  margin: 0 !important; 
+                  padding: 0 !important; 
+              }
 
-              /* 2. TABELLA ADATTIVA */
+              /* Visualizzazione a video */
+              body { padding: 20mm 15mm; display: block !important; }
+
+              /* 3. TABELLA ADATTIVA */
               table {
                   display: table !important;
                   width: 100% !important;
@@ -52,24 +70,29 @@ export default function handler(req, res) {
                   page-break-inside: auto !important;
               }
 
+              tr {
+                  page-break-inside: avoid !important;
+                  page-break-after: auto !important;
+              }
+
               th, td {
                   border: 1px solid black !important;
-                  padding: 4px !important; /* Ridotto leggermente per guadagnare spazio */
+                  padding: 8px !important;
                   vertical-align: top !important;
                   text-align: left !important;
                   white-space: normal !important;
                   word-break: normal !important; 
                   overflow-wrap: break-word !important; 
-                  /* Font iniziale */
-                  font-size: 10pt; 
+                  font-size: 10pt; /* Punto di partenza */
               }
 
               th { background-color: #f2f2f2 !important; font-weight: bold !important; }
 
               .header-container {
                   border-bottom: 2px solid black !important;
-                  margin-bottom: 15px;
-                  padding-bottom: 5px;
+                  margin-bottom: 20px;
+                  padding-bottom: 10px;
+                  width: 100%;
               }
           </style>
       </head>
@@ -83,8 +106,8 @@ export default function handler(req, res) {
               ${cleanBody}
           </div>
 
-          <div style="margin-top: 30px; font-size: 8pt; text-align: center; border-top: 1px solid black !important; padding-top: 5px;">
-              FlipJudge AI Check | ${cleanDate} | ${cleanUser}
+          <div style="margin-top: 30px; font-size: 8pt; text-align: center; border-top: 1px solid black !important; padding-top: 10px;">
+              FlipJudge AI Check | Printed: ${cleanDate} | User: ${cleanUser}
           </div>
 
           <script>
@@ -93,11 +116,10 @@ export default function handler(req, res) {
                   const container = document.getElementById('content-area');
                   const maxWidth = container.offsetWidth;
 
+                  // Riduzione font se la tabella sfora lateralmente
                   tables.forEach(table => {
-                      let fontSize = 10; // Partiamo da 10pt
-                      const minFontSize = 6; // Non scendere sotto i 6pt per leggibilità
-
-                      // Se la tabella è più larga del contenitore, riduci il font progressivamente
+                      let fontSize = 10;
+                      const minFontSize = 7; 
                       while (table.offsetWidth > maxWidth && fontSize > minFontSize) {
                           fontSize -= 0.5;
                           table.querySelectorAll('td, th').forEach(cell => {
@@ -106,8 +128,7 @@ export default function handler(req, res) {
                       }
                   });
 
-                  // Una volta sistemate le dimensioni, lancia la stampa
-                  setTimeout(() => { window.print(); }, 500);
+                  setTimeout(() => { window.print(); }, 600);
               };
           </script>
       </body>
