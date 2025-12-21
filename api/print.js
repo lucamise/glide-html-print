@@ -145,10 +145,8 @@ export default function handler(req, res) {
                       </div>
                       <div class="print-meta">
                           Printed on: ${elegantDate} | User: ${cleanUser}
+                          App: https://flipjudge.glide.page/</a>
                       </div>
-                  </div>
-                  <div class="app-link-row">
-                      App: <a href="https://flipjudge.glide.page/">https://flipjudge.glide.page/</a>
                   </div>
               </div>
 
