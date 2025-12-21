@@ -144,7 +144,7 @@ export default function handler(req, res) {
                           Competition: <strong>${cleanComp}</strong>
                       </div>
                       <div class="print-meta">
-                          Printed on: ${elegantDate} | User: ${cleanUser}
+                          Printed on: ${elegantDate} | User: ${cleanUser} <br>
                           App: https://flipjudge.glide.page/</a>
                       </div>
                   </div>
