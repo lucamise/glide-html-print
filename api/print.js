@@ -52,52 +52,47 @@ export default function handler(req, res) {
                   padding: 0 !important;
               }
 
-              /* 2. TITOLI */
-              h1, h2, h3, h4, h5, h6 {
-                  text-align: left !important;
-                  font-weight: bold !important;
-                  margin: 0.5rem 0 0.2rem 0 !important;
-              }
-              h1 { font-size: 1.3rem !important; }
-              h3 { font-size: 1.0rem !important; }
-
-              /* 3. INTESTAZIONE A DUE RIGHE */
+              /* 2. LAYOUT HEADER (IL CUORE DELLA TUA RICHIESTA) */
               .header-container {
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: flex-end; /* Allinea le ultime righe in basso */
                   border-bottom: 1.5px solid #000;
-                  margin-bottom: 1rem;
                   padding-bottom: 0.5rem;
+                  margin-bottom: 1rem;
                   width: 100%;
               }
 
-              /* Riga superiore: Data e Utente */
-              .meta-upper-row {
-                  width: 100%;
+              /* Blocco Sinistra */
+              .left-block {
+                  text-align: left;
+              }
+              .left-block h1 {
+                  font-size: 1.3rem !important;
+                  font-weight: bold !important;
+                  margin: 0 !important;
+                  line-height: 1.2;
+              }
+              .left-block .comp-info {
+                  font-size: 10pt;
+                  margin-top: 2px;
+              }
+
+              /* Blocco Destra */
+              .right-block {
+                  text-align: right;
                   font-size: 8pt;
                   color: #444;
-                  text-align: right; /* Allineato a destra per pulizia, o left se preferisci */
-                  margin-bottom: 4px;
               }
-
-              /* Riga inferiore: Competizione e App */
-              .info-lower-row {
-                  display: flex;
-                  justify-content: flex-start;
-                  align-items: baseline;
-                  width: 100%;
-                  gap: 40px; /* Spazio tra Comp e App */
-                  font-size: 10pt;
+              .right-block .meta-info {
+                  margin-bottom: 2px;
               }
-
-              .app-link {
-                  font-size: 8pt;
-              }
-              
-              .app-link a {
-                  color: black !important;
+              .right-block .app-info a {
+                  color: #444 !important;
                   text-decoration: none !important;
               }
 
-              /* 4. TABELLA */
+              /* 3. TABELLA */
               table {
                   width: 100% !important;
                   max-width: 100% !important;
@@ -144,17 +139,14 @@ export default function handler(req, res) {
       <body>
           <div id="page-container">
               <div class="header-container">
-                  <h1>FlipJudge AI Check</h1>
-                  
-                  <div class="meta-upper-row">
-                      Printed on: ${elegantDate} | User: ${cleanUser}
+                  <div class="left-block">
+                      <h1>FlipJudge AI Check</h1>
+                      <div class="comp-info">Competition: <strong>${cleanComp}</strong></div>
                   </div>
 
-                  <div class="info-lower-row">
-                      <div>Competition: <strong>${cleanComp}</strong></div>
-                      <div class="app-link">
-                          App: <a href="https://flipjudge.glide.page/">https://flipjudge.glide.page/</a>
-                      </div>
+                  <div class="right-block">
+                      <div class="meta-info">Printed on: ${elegantDate} | User: ${cleanUser}</div>
+                      <div class="app-info">App: <a href="https://flipjudge.glide.page/">https://flipjudge.glide.page/</a></div>
                   </div>
               </div>
 
