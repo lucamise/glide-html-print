@@ -61,7 +61,7 @@ export default function handler(req, res) {
               h1 { font-size: 1.3rem !important; }
               h3 { font-size: 1.0rem !important; }
 
-              /* 3. INTESTAZIONE */
+              /* 3. INTESTAZIONE A DUE RIGHE */
               .header-container {
                   border-bottom: 1.5px solid #000;
                   margin-bottom: 1rem;
@@ -69,24 +69,30 @@ export default function handler(req, res) {
                   width: 100%;
               }
 
-              .header-meta-row {
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: baseline;
+              /* Riga superiore: Data e Utente */
+              .meta-upper-row {
                   width: 100%;
+                  font-size: 8pt;
+                  color: #444;
+                  text-align: right; /* Allineato a destra per pulizia, o left se preferisci */
+                  margin-bottom: 4px;
               }
 
-              .comp-name { font-size: 10pt; }
-              .print-meta { font-size: 8pt; text-align: right; }
-              
-              /* Nuova riga per il link */
-              .app-link-row {
+              /* Riga inferiore: Competizione e App */
+              .info-lower-row {
+                  display: flex;
+                  justify-content: flex-start;
+                  align-items: baseline;
+                  width: 100%;
+                  gap: 40px; /* Spazio tra Comp e App */
+                  font-size: 10pt;
+              }
+
+              .app-link {
                   font-size: 8pt;
-                  margin-top: 2px;
-                  text-align: left;
               }
               
-              .app-link-row a {
+              .app-link a {
                   color: black !important;
                   text-decoration: none !important;
               }
@@ -139,13 +145,15 @@ export default function handler(req, res) {
           <div id="page-container">
               <div class="header-container">
                   <h1>FlipJudge AI Check</h1>
-                  <div class="header-meta-row">
-                      <div class="comp-name">
-                          Competition: <strong>${cleanComp}</strong>
-                      </div>
-                      <div class="print-meta">
-                          Printed on: ${elegantDate} | User: ${cleanUser} <br>
-                          App: https://flipjudge.glide.page/</a>
+                  
+                  <div class="meta-upper-row">
+                      Printed on: ${elegantDate} | User: ${cleanUser}
+                  </div>
+
+                  <div class="info-lower-row">
+                      <div>Competition: <strong>${cleanComp}</strong></div>
+                      <div class="app-link">
+                          App: <a href="https://flipjudge.glide.page/">https://flipjudge.glide.page/</a>
                       </div>
                   </div>
               </div>
