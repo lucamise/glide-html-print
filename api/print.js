@@ -52,13 +52,22 @@ export default function handler(req, res) {
                   padding: 0 !important;
               }
 
-              /* 2. LAYOUT HEADER (IL CUORE DELLA TUA RICHIESTA) */
+              /* 2. GERARCHIA TITOLI NEL CONTENUTO */
+              h1, h2, h3, h4, h5, h6 {
+                  text-align: left !important;
+                  font-weight: bold !important;
+                  margin: 0.5rem 0 0.2rem 0 !important;
+              }
+              h2 { font-size: 1.15rem !important; }
+              h3 { font-size: 1.0rem !important; }
+
+              /* 3. LAYOUT HEADER (Allineamento in basso) */
               .header-container {
                   display: flex;
                   justify-content: space-between;
-                  align-items: flex-end; /* Allinea le ultime righe in basso */
+                  align-items: flex-end; /* Blocca le basi delle ultime righe sulla stessa linea */
                   border-bottom: 1.5px solid #000;
-                  padding-bottom: 0.5rem;
+                  padding-bottom: 0.4rem;
                   margin-bottom: 1rem;
                   width: 100%;
               }
@@ -71,7 +80,7 @@ export default function handler(req, res) {
                   font-size: 1.3rem !important;
                   font-weight: bold !important;
                   margin: 0 !important;
-                  line-height: 1.2;
+                  line-height: 1.1;
               }
               .left-block .comp-info {
                   font-size: 10pt;
@@ -87,12 +96,8 @@ export default function handler(req, res) {
               .right-block .meta-info {
                   margin-bottom: 2px;
               }
-              .right-block .app-info a {
-                  color: #444 !important;
-                  text-decoration: none !important;
-              }
 
-              /* 3. TABELLA */
+              /* 4. TABELLA: MAX WIDTH 100% */
               table {
                   width: 100% !important;
                   max-width: 100% !important;
@@ -133,6 +138,9 @@ export default function handler(req, res) {
                   body { background-color: white !important; padding: 0 !important; margin: 0 !important; }
                   #page-container { width: 100% !important; padding: 0 !important; box-shadow: none !important; }
                   tr { page-break-inside: avoid !important; }
+                  
+                  /* Rimuove l'aggiunta automatica degli URL di Gutenberg */
+                  a:after { content: "" !important; }
               }
           </style>
       </head>
@@ -146,7 +154,7 @@ export default function handler(req, res) {
 
                   <div class="right-block">
                       <div class="meta-info">Printed on: ${elegantDate} | User: ${cleanUser}</div>
-                      <div class="app-info">App: <a href="https://flipjudge.glide.page/">https://flipjudge.glide.page/</a></div>
+                      <div class="app-info">App: https://flipjudge.glide.page/</div>
                   </div>
               </div>
 
